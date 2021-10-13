@@ -1,0 +1,123 @@
+<%- include('head'); -%>
+<%- include('sidebar'); -%>
+<%- include('header'); -%>
+
+
+<div class="content-wrap">
+
+  <div class="main">
+    <div class="container-fluid">
+
+      <!-- /# row -->
+      <section id="main-content">
+        <div class="row">
+
+          <div class="col-lg-12">
+
+            <div class="card">
+              <div class="card-title">
+                <h3>Cadastro de Rede</h3>
+              </div>
+              <br>
+              
+              <form id="createRede" method="POST" action="/network/routeCreateNetwork" enctype="application/json">
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <h4>Rede</h4>
+
+                    <div class="form-group">
+                      <label for="labelNomeRede">Nome da Rede</label>
+                      <input type="text" class="form-control" id="nomeRede" name="nomeRede"
+                        placeholder="Digite o nome do rede" required>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="labelDescricaoRede">Descrição da Rede</label>
+                    <textarea style="resize: none;" class="form-control" id="descricaoRede" name="descricaoRede"
+                      placeholder="Digite a descrição do rede" rows="4" required></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <br>
+              <div class="row">
+                <div class="col-lg-12">
+                  <h6>Organizações</h6>
+                </div>
+              </div>
+
+              <div class="row" id="rowId1">
+
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="nomeOrg" name="nomeOrg[]"
+                    placeholder="Digite o nome da organização" required>
+
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <input type="number" min="1" class="form-control" id="numPeer" name="numPeer[]"
+                      placeholder="Digite o número de nós da organização" required>
+
+                    </div>
+                  </div>
+                <div class="col-md-2">
+                  <a id="1" onclick="deleteOrgRow(this.id)" class="btn btn-danger" href="#" title="Remover Organização"><i class="ti-close"></i></a>
+
+                </div>
+              </div>
+
+              <div id="orgList">
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <input type="button" id="addOrg" class="btn btn-primary" value="Adicionar Organização">
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <h6>Canal</h6>
+                  <div class="form-group">
+                    <label for="labelNomeCanal">Nome do Canal</label>
+                    <input type="text" class="form-control" id="nomeCanal" name="nomeCanal"
+                      placeholder="Digite o nome do canal inicial de conexão da rede" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-2">
+                  <input type="button" onclick="validate()" class="btn btn-success" value="Salvar">
+                </div>
+                <div class="col-lg-5"></div>
+              </div>
+
+              </form>
+              <!-- Formulário -->
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<%- include('importScript'); -%>
+
+<script src="/js/saveNetworkScript.js"></script>
+
+</body>
+
+</html>

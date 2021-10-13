@@ -1,0 +1,161 @@
+#############################################################################
+#  Signing section
+#
+#  The "default" subsection is used to sign enrollment certificates;
+#  the default expiration ("expiry" field) is "8760h", which is 1 year in hours.
+#
+#  The "ca" profile subsection is used to sign intermediate CA certificates;
+#  the default expiration ("expiry" field) is "43800h" which is 5 years in hours.
+#  Note that "isca" is true, meaning that it issues a CA certificate.
+#  A maxpathlen of 0 means that the intermediate CA cannot issue other
+#  intermediate CA certificates, though it can still issue end entity certificates.
+#  (See RFC 5280, section 4.2.1.9)
+#
+#  The "tls" profile subsection is used to sign TLS certificate requests;
+#  the default expiration ("expiry" field) is "8760h", which is 1 year in hours.
+#############################################################################
+signing:
+    default:
+      usage:
+        - digital signature
+      expiry: 8760h
+    profiles:
+      ca:
+         usage:
+           - cert sign
+           - crl sign
+         expiry: 43800h
+         caconstraint:
+           isca: true
+           maxpathlen: 0
+      tls:
+         usage:
+            - signing
+            - key encipherment
+            - server auth
+            - client auth
+            - key agreement
+         expiry: 8760h
+
+###########################################################################
+#  Certificate Signing Request (CSR) section.
+#  This controls the creation of the root CA certificate.
+#  The expiration for the root CA certificate is configured with the
+#  "ca.expiry" field below, whose default value is "131400h" which is
+#  15 years in hours.
+#  The pathlength field is used to limit CA certificate hierarchy as described
+#  in section 4.2.1.9 of RFC 5280.
+#  Examples:
+#  1) No pathlength value means no limit is requested.
+#  2) pathlength == 1 means a limit of 1 is requested which is the default for
+#     a root CA.  This means the root CA can issue intermediate CA certificates,
+#     but these intermediate CAs may not in turn issue other CA certificates
+#     though they can still issue end entity certificates.
+#  3) pathlength == 0 means a limit of 0 is requested;
+#     this is the default for an intermediate CA, which means it can not issue
+#     CA certificates though it can still issue end entity certificates.
+###########################################################################
+csr:
+   cn: ca.orgname.example.com
+   names:
+      - C: US
+        ST: "North Carolina"
+        L: "Durham"
+        O: orgname.example.com
+        OU:
+   hosts:
+     - localhost
+     - orgname.example.com
+   ca:
+      expiry: 131400h
+      pathlength: 1
+
+#############################################################################
+# BCCSP (BlockChain Crypto Service Provider) section is used to select which
+# crypto library implementation to use
+#############################################################################
+bccsp:
+    default: SW
+    sw:
+        hash: SHA2
+        security: 256
+        filekeystore:
+            # The directory used for the software file-based keystore
+            keystore: msp/keystore
+
+#############################################################################
+# Multi CA section
+#
+# Each Fabric CA server contains one CA by default.  This section is used
+# to configure multiple CAs in a single server.
+#
+# 1) --cacount <number-of-CAs>
+# Automatically generate <number-of-CAs> non-default CAs.  The names of these
+# additional CAs are "ca1", "ca2", ... "caN", where "N" is <number-of-CAs>
+# This is particularly useful in a development environment to quickly set up
+# multiple CAs. Note that, this config option is not applicable to intermediate CA server
+# i.e., Fabric CA server that is started with intermediate.parentserver.url config
+# option (-u command line option)
+#
+# 2) --cafiles <CA-config-files>
+# For each CA config file in the list, generate a separate signing CA.  Each CA
+# config file in this list MAY contain all of the same elements as are found in
+# the server config file except port, debug, and tls sections.
+#
+# Examples:
+# fabric-ca-server start -b admin:adminpw --cacount 2
+#
+# fabric-ca-server start -b admin:adminpw --cafiles ca/ca1/fabric-ca-server-config.yaml
+# --cafiles ca/ca2/fabric-ca-server-config.yaml
+#
+#############################################################################
+
+cacount:
+
+cafiles:
+
+#############################################################################
+# Intermediate CA section
+#
+# The relationship between servers and CAs is as follows:
+#   1) A single server process may contain or function as one or more CAs.
+#      This is configured by the "Multi CA section" above.
+#   2) Each CA is either a root CA or an intermediate CA.
+#   3) Each intermediate CA has a parent CA which is either a root CA or another intermediate CA.
+#
+# This section pertains to configuration of #2 and #3.
+# If the "intermediate.parentserver.url" property is set,
+# then this is an intermediate CA with the specified parent
+# CA.
+#
+# parentserver section
+#    url - The URL of the parent server
+#    caname - Name of the CA to enroll within the server
+#
+# enrollment section used to enroll intermediate CA with parent CA
+#    profile - Name of the signing profile to use in issuing the certificate
+#    label - Label to use in HSM operations
+#
+# tls section for secure socket connection
+#   certfiles - PEM-encoded list of trusted root certificate files
+#   client:
+#     certfile - PEM-encoded certificate file for when client authentication
+#     is enabled on server
+#     keyfile - PEM-encoded key file for when client authentication
+#     is enabled on server
+#############################################################################
+intermediate:
+  parentserver:
+    url:
+    caname:
+
+  enrollment:
+    hosts:
+    profile:
+    label:
+
+  tls:
+    certfiles:
+    client:
+      certfile:
+      keyfile:
