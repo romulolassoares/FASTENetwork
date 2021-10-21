@@ -86,12 +86,19 @@ router.post('/routeDeleteNetwork', async (req, res)=>{
 //OPERAÇÕES REDE
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-
 // Iniciar a rede
 router.get('/routeStartNetwork/:id', async (req, res)=>{
     const rededatabase = await RedeDatabase.findById(req.params.id)
     res.send(rededatabase);
     createNetwork.startNetwork(rededatabase);
+    RedeDatabase.updateOne({_id: rededatabase._id}, {
+        $set: {
+            isOnline: true,
+        }
+    }, (err, result) => {
+        if(err) return res.send(err)
+        console.log("Atualizado")
+    })
 });
 
 // Parar a rede
@@ -99,6 +106,14 @@ router.get('/routeStopNetwork/:id', async (req, res)=>{
     const rededatabase = await RedeDatabase.findById(req.params.id)
     res.send(rededatabase);
     createNetwork.stopNetwork(rededatabase);
+    RedeDatabase.updateOne({_id: rededatabase._id}, {
+        $set: {
+            isOnline: false,
+        }
+    }, (err, result) => {
+        if(err) return res.send(err)
+        console.log("Atualizado")
+    })
 });
 
 // Criar canal
@@ -108,18 +123,6 @@ router.get('/routeCreateChannel/:id', async (req, res)=>{
     createNetwork.createChannel(rededatabase);
 });
 
-// Criar identidade
-router.get('/routeCreateIdentity/:id', async (req, res)=>{
-    const rededatabase = await RedeDatabase.findById(req.params.id)
-    res.send(rededatabase);
-});
-
-// Conectar canal
-router.get('/routeConnectChannel/:id', async (req, res)=>{
-    const rededatabase = await RedeDatabase.findById(req.params.id)
-    res.send(rededatabase);
-});
-
 // Instalar chaincode
 router.get('/routeInstallChaincode/:id', async (req, res)=>{
     const rededatabase = await RedeDatabase.findById(req.params.id)
@@ -127,10 +130,10 @@ router.get('/routeInstallChaincode/:id', async (req, res)=>{
     createNetwork.deployCC(rededatabase);
 });
 
-// Instanciar chaincode
-router.get('/routeInstantiateChaincode/:id', async (req, res)=>{
-    const rededatabase = await RedeDatabase.findById(req.params.id)
-    res.send(rededatabase);
-});
-
 module.exports = router;
+
+
+// const test = await RedeDatabase.findOne({
+//     isOnline: true
+// })
+// console.log(test)
