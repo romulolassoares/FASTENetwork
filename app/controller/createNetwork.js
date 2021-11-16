@@ -274,6 +274,8 @@ module.exports = {
       shell.exec('./network.sh down');
       shell.cd('../..');
 
+      extra.deleteFolderRecursive(pathNetworks+"/chaincode/wallet")
+
   },
 
   async createChannel(rededatabase){
