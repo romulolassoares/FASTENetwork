@@ -177,7 +177,20 @@ module.exports = {
 
   async recCopy(srcDir, destDir) {
    wrench.copyDirSyncRecursive(srcDir, destDir);
-  }
+  },
   
+  async deleteFolderRecursive(pathFile) {
+   if (fs.existsSync(pathFile)) {
+     fs.readdirSync(pathFile).forEach((file, index) => {
+       const curPath = path.join(pathFile, file);
+       if (fs.lstatSync(curPath).isDirectory()) { // recurse
+         deleteFolderRecursive(curPath);
+       } else { // delete file
+         fs.unlinkSync(curPath);
+       }
+     });
+     fs.rmdirSync(pathFile);
+   }
+ },
    
 }
