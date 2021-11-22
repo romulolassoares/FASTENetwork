@@ -116,13 +116,6 @@ router.get('/routeStopNetwork/:id', async (req, res)=>{
     })
 });
 
-// Criar canal
-router.get('/routeCreateChannel/:id', async (req, res)=>{
-    const rededatabase = await RedeDatabase.findById(req.params.id)
-    res.send(rededatabase);
-    createNetwork.createChannel(rededatabase);
-});
-
 // Instalar chaincode
 router.get('/routeInstallChaincode/:id', async (req, res)=>{
     const rededatabase = await RedeDatabase.findById(req.params.id)
@@ -131,9 +124,3 @@ router.get('/routeInstallChaincode/:id', async (req, res)=>{
 });
 
 module.exports = router;
-
-
-// const test = await RedeDatabase.findOne({
-//     isOnline: true
-// })
-// console.log(test)
