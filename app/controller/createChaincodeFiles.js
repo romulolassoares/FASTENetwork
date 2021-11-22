@@ -1,14 +1,6 @@
 const fs = require('fs');
-const fsex = require('fs-extra');
 const path = require('path');
-const shell = require('shelljs');
-const readline = require('readline');
-const crypto = require('crypto');
 
-const extra = require('./extra');
-const creatShFiles = require('./createShFiles');
-const validacao = require('./validacao');
-const { create } = require('../database/models/RedeModel');
 
 module.exports = {
 
