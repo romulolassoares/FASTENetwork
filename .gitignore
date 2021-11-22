@@ -1,0 +1,7 @@
+# Remove node_modules folder
+node_modules/
+
+# Remove all networks folder and keep bin and config folder
+networks
+!/networks/bin
+!/networks/config

@@ -22,11 +22,13 @@
     "mongod": "^2.0.0",
     "mongoose": "^6.0.10",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.6",
     "readme-md-generator": "^1.0.0",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.4",
     "toastr": "^2.1.4",
     "wrench": "^1.5.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
